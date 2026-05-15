@@ -1,8 +1,14 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+// Initialize Gemini AI
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }, { apiVersion: "v1" });
 
 // Middleware
 app.use(cors());
@@ -11,9 +17,46 @@ app.use(express.json());
 // In-memory store for complaints (dummy database)
 const complaints = [];
 
+/**
+ * POST /api/generate-question
+ * Generates a follow-up question based on the complaint details.
+ */
+app.post("/api/generate-question", async (req, res) => {
+  const { name, city, complaint } = req.body;
+
+  if (!complaint) {
+    return res.status(400).json({ success: false, message: "Complaint text is required." });
+  }
+
+  try {
+    const prompt = `You are a professional assistant for a city complaint portal. 
+    A citizen named ${name} from ${city} has submitted the following complaint:
+    "${complaint}"
+    
+    Ask exactly one specific, polite, and helpful follow-up question to clarify the issue or gather more relevant details. 
+    Do not include any other text or greetings. Just the question.`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const question = response.text().trim();
+
+    res.json({
+      success: true,
+      question: question
+    });
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to generate AI question. Please try again later.",
+      error: error.message
+    });
+  }
+});
+
 // POST /api/complaints — Submit a new complaint
 app.post("/api/complaints", (req, res) => {
-  const { name, city, mobile, complaint } = req.body;
+  const { name, city, mobile, complaint, aiQuestion, userAnswer } = req.body;
 
   // Basic validation
   if (!name || !city || !mobile || !complaint) {
@@ -29,6 +72,8 @@ app.post("/api/complaints", (req, res) => {
     city,
     mobile,
     complaint,
+    aiQuestion: aiQuestion || "N/A",
+    userAnswer: userAnswer || "N/A",
     status: "Pending",
     createdAt: new Date().toISOString(),
   };

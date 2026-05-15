@@ -184,3 +184,37 @@ body { font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif; backgrou
 /* Responsive */
 @media(max-width:700px) { .stats-row{grid-template-columns:repeat(2,1fr)} .navbar{flex-direction:column;gap:0.75rem} .card-header{flex-direction:column;gap:0.75rem} .card-footer{flex-direction:column;gap:0.75rem;align-items:flex-start} }
 @media(max-width:480px) { .stats-row{grid-template-columns:1fr 1fr;gap:0.75rem} .filter-bar{flex-wrap:wrap} .complaint-card{padding:1.15rem} }
+/* AI Q&A Card Section */
+.card-ai-qa {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--bg-card-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ai-qa-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ai-qa-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent-solid);
+  opacity: 0.85;
+}
+
+.ai-qa-text {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border-left: 2px solid rgba(129, 140, 248, 0.3);
+}

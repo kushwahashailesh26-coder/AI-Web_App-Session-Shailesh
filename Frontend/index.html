@@ -127,6 +127,27 @@
           <span class="error-msg" id="error-complaint"></span>
         </div>
 
+        <!-- AI Question Section (Hidden by default) -->
+        <div id="ai-section" class="ai-section hidden">
+          <div class="ai-header">
+            <div class="ai-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                <path d="M12 7v5"></path>
+                <path d="M12 16h.01"></path>
+              </svg>
+            </div>
+            <span>AI Clarification Question</span>
+          </div>
+          <p id="ai-question-text" class="ai-question"></p>
+          <div class="form-group" id="group-answer">
+            <label for="answer">Your Answer</label>
+            <input type="text" id="answer" name="answer" placeholder="Please provide more details..." />
+            <span class="error-msg" id="error-answer"></span>
+          </div>
+        </div>
+
         <!-- Submit Button -->
         <button type="submit" id="submit-btn" class="btn-submit">
           <span class="btn-text">Submit Complaint</span>

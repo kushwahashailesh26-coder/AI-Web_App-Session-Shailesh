@@ -438,3 +438,69 @@ textarea {
     opacity: 0.2;
   }
 }
+/* ===== AI Section ===== */
+.hidden {
+  display: none !important;
+}
+
+.ai-section {
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  animation: fade-in-up 0.5s ease both;
+}
+
+.ai-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+  color: var(--accent-solid);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ai-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--accent-gradient);
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+}
+
+.ai-question {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+  padding-left: 0.25rem;
+  border-left: 3px solid var(--accent-solid);
+  padding-left: 1rem;
+}
+
+#group-answer {
+  margin-bottom: 0;
+  animation: none;
+}
+
+#group-answer label {
+  color: var(--text-primary);
+  font-size: 0.8rem;
+}
+
+#answer {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+#answer:focus {
+  background: rgba(255, 255, 255, 0.12);
+}

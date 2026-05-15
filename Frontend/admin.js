@@ -43,7 +43,7 @@ function downloadExcel() {
 
   // Define headers
   const headers = ["ID", "Name", "City", "Mobile", "Complaint", "Status", "Created At"];
-  
+
   // Create CSV content
   const rows = data.map(c => [
     c.id,
@@ -58,15 +58,15 @@ function downloadExcel() {
   const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
-  
+
   const link = document.createElement("a");
   link.setAttribute("href", url);
-  link.setAttribute("download", `Complaints_${currentFilter}_${new Date().toISOString().slice(0,10)}.csv`);
+  link.setAttribute("download", `Complaints_${currentFilter}_${new Date().toISOString().slice(0, 10)}.csv`);
   link.style.visibility = "hidden";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  
+
   showToast("Excel (CSV) file downloaded!");
 }
 
@@ -83,13 +83,13 @@ async function downloadPDF() {
     if (!jsPDF) {
       throw new Error("jsPDF library not loaded. Check your internet connection.");
     }
-    
+
     const doc = new jsPDF();
 
     // Add Title
     doc.setFontSize(18);
     doc.text("Registered Complaints Report", 14, 20);
-    
+
     doc.setFontSize(11);
     doc.setTextColor(100);
     doc.text(`Filter: ${currentFilter.toUpperCase()} | Generated on: ${new Date().toLocaleString()}`, 14, 30);
@@ -107,7 +107,7 @@ async function downloadPDF() {
 
     // Generate table
     const autoTable = doc.autoTable || window.autoTable;
-    
+
     if (typeof autoTable !== 'function') {
       throw new Error("PDF Table plugin (autoTable) not found. Please refresh and try again.");
     }
@@ -123,7 +123,7 @@ async function downloadPDF() {
     });
 
     // Save the PDF
-    doc.save(`Complaints_${currentFilter}_${new Date().toISOString().slice(0,10)}.pdf`);
+    doc.save(`Complaints_${currentFilter}_${new Date().toISOString().slice(0, 10)}.pdf`);
     showToast("PDF report downloaded!");
   } catch (err) {
     console.error("PDF Export Error:", err);
@@ -223,6 +223,19 @@ function createComplaintCard(c, index) {
 
   const isPending = c.status === "Pending";
 
+  const aiSectionHtml = (c.aiQuestion && c.aiQuestion !== "N/A") ? `
+    <div class="card-ai-qa">
+      <div class="ai-qa-item">
+        <span class="ai-qa-label">AI Question:</span>
+        <p class="ai-qa-text">${escapeHtml(c.aiQuestion)}</p>
+      </div>
+      <div class="ai-qa-item">
+        <span class="ai-qa-label">User Answer:</span>
+        <p class="ai-qa-text">${escapeHtml(c.userAnswer)}</p>
+      </div>
+    </div>
+  ` : '';
+
   return `
     <div class="complaint-card" style="animation-delay: ${index * 0.06}s" id="card-${c.id}">
       <div class="card-header">
@@ -249,6 +262,7 @@ function createComplaintCard(c, index) {
       </div>
       <div class="card-body">
         <p class="complaint-text">${escapeHtml(c.complaint)}</p>
+        ${aiSectionHtml}
       </div>
       <div class="card-footer">
         <span class="card-time">
