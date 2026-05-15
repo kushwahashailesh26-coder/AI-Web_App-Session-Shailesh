@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Submit your complaints easily through our online complaint registration portal." />
+  <title>Complaint Portal — Submit Your Complaint</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Animated background blobs -->
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </div>
+      <span>Complaint Portal</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active" id="nav-submit">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        Submit
+      </a>
+      <a href="admin.html" class="nav-link" id="nav-dashboard">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        Dashboard
+      </a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- Header -->
+    <header class="header" id="page-header">
+      <div class="logo-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </div>
+      <h1>Complaint Portal</h1>
+      <p class="subtitle">We value your feedback. Submit your complaint below and we'll address it promptly.</p>
+    </header>
+
+    <!-- Complaint Form Card -->
+    <section class="card" id="complaint-form-card">
+      <form id="complaint-form" novalidate>
+        <!-- Name Field -->
+        <div class="form-group" id="group-name">
+          <label for="name">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            Full Name
+          </label>
+          <input type="text" id="name" name="name" placeholder="e.g. Shailesh Kushwaha" required />
+          <span class="error-msg" id="error-name"></span>
+        </div>
+
+        <!-- City Field -->
+        <div class="form-group" id="group-city">
+          <label for="city">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            City
+          </label>
+          <input type="text" id="city" name="city" placeholder="e.g. Mumbai" required />
+          <span class="error-msg" id="error-city"></span>
+        </div>
+
+        <!-- Mobile Number Field -->
+        <div class="form-group" id="group-mobile">
+          <label for="mobile">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+            Mobile Number
+          </label>
+          <input type="tel" id="mobile" name="mobile" placeholder="e.g. 9876543210" maxlength="10" pattern="[6-9][0-9]{9}" required />
+          <span class="error-msg" id="error-mobile"></span>
+        </div>
+
+        <!-- Complaint Field -->
+        <div class="form-group" id="group-complaint">
+          <label for="complaint">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            Your Complaint
+          </label>
+          <textarea id="complaint" name="complaint" rows="4" placeholder="Describe your complaint in detail..." required></textarea>
+          <span class="error-msg" id="error-complaint"></span>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="submit-btn" class="btn-submit">
+          <span class="btn-text">Submit Complaint</span>
+          <span class="btn-loader" id="btn-loader"></span>
+        </button>
+      </form>
+    </section>
+
+    <!-- Success Toast -->
+    <div class="toast" id="success-toast">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+      <span id="toast-message">Complaint submitted successfully!</span>
+    </div>
+
+    <!-- Error Toast -->
+    <div class="toast toast-error" id="error-toast">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+      <span id="error-toast-message">Something went wrong!</span>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
