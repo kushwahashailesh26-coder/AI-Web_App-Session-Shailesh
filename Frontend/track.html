@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Track Status — Complaint Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .track-card { margin-bottom: 2rem; }
+    .complaint-item { 
+      background: rgba(255, 255, 255, 0.03); 
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      border-radius: var(--radius-md); 
+      padding: 1.5rem; 
+      margin-bottom: 1rem;
+      animation: fade-in-up 0.4s ease both;
+    }
+    .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .item-id { font-size: 0.75rem; font-weight: 700; color: var(--accent-solid); text-transform: uppercase; }
+    .status-pill { padding: 0.25rem 0.75rem; border-radius: 100px; font-size: 0.75rem; font-weight: 700; }
+    .status-Pending { background: rgba(251, 191, 36, 0.1); color: #fbbf24; }
+    .status-Resolved { background: rgba(52, 211, 153, 0.1); color: #34d399; }
+    .status-Rejected { background: rgba(248, 113, 113, 0.1); color: #f87171; }
+    .item-body p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1rem; }
+    .concern-section { margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed rgba(255, 255, 255, 0.1); }
+    .btn-concern { font-size: 0.75rem; padding: 0.4rem 0.8rem; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); color: var(--accent-solid); border-radius: var(--radius-sm); cursor: pointer; }
+    .concern-input { margin-top: 0.5rem; display: none; }
+  </style>
+</head>
+<body>
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+
+  <nav class="navbar">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </div>
+      <span>Complaint Portal</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Submit</a>
+      <a href="track.html" class="nav-link active">Track</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <header class="header">
+      <h1>Track Status</h1>
+      <p class="subtitle">Enter your mobile number to view your complaint history.</p>
+    </header>
+
+    <section class="card track-card">
+      <div class="form-group">
+        <label for="track-mobile">Mobile Number</label>
+        <div style="display: flex; gap: 0.75rem;">
+          <input type="tel" id="track-mobile" placeholder="e.g. 9876543210" maxlength="10">
+          <button id="btn-track" class="btn-submit" style="width: auto; padding: 0 1.5rem; margin-top: 0;">Search</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="results-container"></div>
+  </main>
+
+  <!-- Success Toast -->
+  <div class="toast" id="success-toast">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+    <span id="toast-message">Concern raised successfully!</span>
+  </div>
+
+  <script src="track.js"></script>
+</body>
+</html>

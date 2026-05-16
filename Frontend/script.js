@@ -1,5 +1,5 @@
-// ===== Configuration =====
-const API_URL = "http://localhost:3000/api/complaints";
+const BASE_URL = "http://localhost:3000";
+const API_URL = `${BASE_URL}/api/complaints`;
 
 // ===== DOM Elements =====
 const form = document.getElementById("complaint-form");
@@ -99,6 +99,18 @@ mobileInput.addEventListener("input", () => {
   mobileInput.value = mobileInput.value.replace(/\D/g, "").slice(0, 10);
 });
 
+// Reset AI state if complaint changes
+const complaintInput = document.getElementById("complaint");
+complaintInput.addEventListener("input", () => {
+  if (isAiQuestionGenerated) {
+    isAiQuestionGenerated = false;
+    aiSection.classList.add("hidden");
+    btnText.textContent = "Submit Complaint";
+    currentAiQuestion = "";
+    answerInput.value = "";
+  }
+});
+
 // ===== Toast Helpers =====
 function showToast(toastElement, message, duration = 3500) {
   const msgSpan = toastElement.querySelector("span");
@@ -141,7 +153,7 @@ form.addEventListener("submit", async (e) => {
     btnText.textContent = "Processing...";
 
     try {
-      const response = await fetch("http://localhost:3000/api/generate-question", {
+      const response = await fetch(`${BASE_URL}/api/generate-question`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -168,7 +180,7 @@ form.addEventListener("submit", async (e) => {
       }
     } catch (err) {
       console.error("Network error:", err);
-      showToast(errorToast, "Cannot connect to server. Is the backend running?");
+      showToast(errorToast, "Server connection failed. Please check if the backend is running.");
     } finally {
       submitBtn.classList.remove("loading");
       submitBtn.disabled = false;

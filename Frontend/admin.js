@@ -236,6 +236,15 @@ function createComplaintCard(c, index) {
     </div>
   ` : '';
 
+  const concernHtml = (c.userConcern) ? `
+    <div class="card-ai-qa" style="background: rgba(248, 113, 113, 0.05); border-color: rgba(248, 113, 113, 0.2);">
+      <div class="ai-qa-item">
+        <span class="ai-qa-label" style="color: var(--error);">Follow-up Concern:</span>
+        <p class="ai-qa-text" style="border-left-color: var(--error);">${escapeHtml(c.userConcern)}</p>
+      </div>
+    </div>
+  ` : '';
+
   return `
     <div class="complaint-card" style="animation-delay: ${index * 0.06}s" id="card-${c.id}">
       <div class="card-header">
@@ -263,6 +272,21 @@ function createComplaintCard(c, index) {
       <div class="card-body">
         <p class="complaint-text">${escapeHtml(c.complaint)}</p>
         ${aiSectionHtml}
+        ${concernHtml}
+        
+        ${isPending ? `
+          <div class="admin-comment-box">
+            <label for="comment-${c.id}" class="comment-label">Admin Comment / Note:</label>
+            <textarea id="comment-${c.id}" class="comment-textarea" placeholder="Add a note for the citizen..."></textarea>
+          </div>
+        ` : c.adminComment ? `
+          <div class="card-ai-qa" style="background: rgba(99, 102, 241, 0.05); border-color: rgba(99, 102, 241, 0.2);">
+            <div class="ai-qa-item">
+              <span class="ai-qa-label">Admin Response:</span>
+              <p class="ai-qa-text">${escapeHtml(c.adminComment)}</p>
+            </div>
+          </div>
+        ` : ''}
       </div>
       <div class="card-footer">
         <span class="card-time">
@@ -287,10 +311,13 @@ function createComplaintCard(c, index) {
 // ===== Update Complaint Status =====
 async function updateStatus(id, newStatus) {
   try {
+    const commentInput = document.getElementById(`comment-${id}`);
+    const adminComment = commentInput ? commentInput.value.trim() : "";
+
     const res = await fetch(`${API_URL}/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: newStatus }),
+      body: JSON.stringify({ status: newStatus, adminComment }),
     });
 
     const result = await res.json();

@@ -2,9 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const DATA_FILE = path.join(__dirname, "complaints.json");
 
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
@@ -13,9 +16,40 @@ const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }, { apiVersi
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "../Frontend")));
 
-// In-memory store for complaints (dummy database)
-const complaints = [];
+// In-memory store (initialized from file)
+let complaints = [];
+
+// Helper to load data
+const loadData = () => {
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      const data = fs.readFileSync(DATA_FILE, "utf8");
+      complaints = JSON.parse(data);
+      console.log("📂 Complaints loaded from file.");
+    } else {
+      complaints = [];
+      saveData(); // Create empty file
+    }
+  } catch (err) {
+    console.error("❌ Error loading data:", err);
+    complaints = [];
+  }
+};
+
+// Helper to save data
+const saveData = () => {
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(complaints, null, 2), "utf8");
+    console.log("💾 Complaints saved to file.");
+  } catch (err) {
+    console.error("❌ Error saving data:", err);
+  }
+};
+
+// Initial load
+loadData();
 
 /**
  * POST /api/generate-question
@@ -67,7 +101,7 @@ app.post("/api/complaints", (req, res) => {
   }
 
   const newComplaint = {
-    id: complaints.length + 1,
+    id: complaints.length > 0 ? Math.max(...complaints.map(c => c.id)) + 1 : 1,
     name,
     city,
     mobile,
@@ -79,6 +113,7 @@ app.post("/api/complaints", (req, res) => {
   };
 
   complaints.push(newComplaint);
+  saveData(); // Persist to file
 
   console.log(`✅ New complaint received from ${name} (${city})`);
 
@@ -101,7 +136,7 @@ app.get("/api/complaints", (req, res) => {
 // PATCH /api/complaints/:id — Update complaint status (Resolve / Reject)
 app.patch("/api/complaints/:id", (req, res) => {
   const id = parseInt(req.params.id, 10);
-  const { status } = req.body;
+  const { status, adminComment } = req.body;
 
   const validStatuses = ["Pending", "Resolved", "Rejected"];
   if (!status || !validStatuses.includes(status)) {
@@ -120,7 +155,9 @@ app.patch("/api/complaints/:id", (req, res) => {
   }
 
   complaint.status = status;
+  complaint.adminComment = adminComment || "";
   complaint.updatedAt = new Date().toISOString();
+  saveData(); // Persist to file
 
   console.log(`📝 Complaint #${id} status changed to "${status}"`);
 
@@ -128,6 +165,42 @@ app.patch("/api/complaints/:id", (req, res) => {
     success: true,
     message: `Complaint #${id} marked as ${status}.`,
     data: complaint,
+  });
+});
+
+// GET /api/complaints/track/:mobile — Track complaints by mobile number
+app.get("/api/complaints/track/:mobile", (req, res) => {
+  const { mobile } = req.params;
+  const userComplaints = complaints.filter(c => c.mobile === mobile);
+  
+  res.json({
+    success: true,
+    data: userComplaints
+  });
+});
+
+// PATCH /api/complaints/:id/concern — Raise a concern for an existing complaint
+app.patch("/api/complaints/:id/concern", (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const { concern } = req.body;
+
+  if (!concern) {
+    return res.status(400).json({ success: false, message: "Concern text is required." });
+  }
+
+  const complaint = complaints.find((c) => c.id === id);
+  if (!complaint) {
+    return res.status(404).json({ success: false, message: "Complaint not found." });
+  }
+
+  complaint.userConcern = concern;
+  complaint.concernRaisedAt = new Date().toISOString();
+  saveData();
+
+  res.json({
+    success: true,
+    message: "Concern raised successfully!",
+    data: complaint
   });
 });
 
